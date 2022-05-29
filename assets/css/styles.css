@@ -69,7 +69,7 @@ h1
     padding-bottom: 0.6rem !important;
     top: 0;
     left: 0;
-    opacity: 0;
+    opacity: 0.9;
     background: linear-gradient(to left, #f5037c , rgb(95, 95, 230));
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
    
