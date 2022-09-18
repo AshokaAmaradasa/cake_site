@@ -5,7 +5,7 @@
 
   if(isset($_GET['product_id']))
   {
-    $product_id = $_GET['product_id'];
+    $product_id = $_GET['product_id']
     $onch;
 
     $stmt = $conn->prepare("SELECT * FROM product_color_price where product_id = ?");
