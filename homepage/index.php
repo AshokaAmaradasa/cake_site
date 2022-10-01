@@ -1,4 +1,22 @@
-<?php include('layouts/header.php');  ?>
+<?php // include('../layouts/header.php'); 
+
+require_once '../configurations/urlconfig.php';
+require_once '../configurations/dirconfig.php';
+include ROOT_PATH.'/db_configurations/dbOperations.php';
+require_once ROOT_PATH.'homepage/controller/homeClassController.php';
+
+$recent_array = $homepageControllerObj->fetchRecentProducts();
+
+$discount_sec_arr = $homepageControllerObj->fetchDiscountProducts();
+
+
+
+//  print("<pre>".print_r($recent_array,true)."</pre>");die;
+
+
+?>
+
+<?php include('../layouts/header.php');  ?>
 
    
   <!--corousel-->    
@@ -15,7 +33,7 @@
      
         <div class="carousel-inner">
           <div class="carousel-item active" data-bs-interval="5000">
-            <img src="assets/images/color.jpg" class="d-block w-100" id="cr_image">
+            <img src="<?php echo URL ?>assets/images/color.jpg" class="d-block w-100" id="cr_image">
             <div class="carousel-caption d-md-block">
               <h5> Best Deals </h5>
               <p style="color: rgb(255, 255, 255);">Got It? Love It? And Wanna Buy It?</p>
@@ -23,7 +41,7 @@
             </div>
           </div>
           <div class="carousel-item" data-bs-interval="5000">
-            <img src="assets/images/converted.jpg" class="d-block w-100" id="cr_image">
+            <img src="<?php echo URL ?>assets/images/converted.jpg" class="d-block w-100" id="cr_image">
             <div class="carousel-caption  d-md-block" >
               <h5>Deco tools</h5>
               <p>Need Tools to Decorate? One Stop for All Your Equipment Needs..</p>
@@ -31,7 +49,7 @@
             </div>
           </div>
           <div class="carousel-item" data-bs-interval="5000">
-            <img src="assets/images/shop.jpg" class="d-block w-100" id="cr_image">
+            <img src="<?php echo URL ?>assets/images/shop.jpg" class="d-block w-100" id="cr_image">
             <div class="carousel-caption  d-md-block">
               <h5>Cake Ingredients</h5>
               <p>Missing Out Some Cake Ingredients? Check with Us.. </p>
@@ -39,7 +57,7 @@
             </div>
           </div>
           <div class="carousel-item" data-bs-interval="5000">
-            <img src="assets/images/converted.jpg" class="d-block w-100" id="cr_image">
+            <img src="<?php echo URL ?>assets/images/converted.jpg" class="d-block w-100" id="cr_image">
             <div class="carousel-caption  d-md-block" >
               <h5>Party Deco's</h5>
               <p>Wishing Having a Party? Try Out Our New Deco Ideas..</p>
@@ -68,14 +86,14 @@
       </div>
       <div class="row mx-auto container-fluid">.
         
-        <?php include('server/get_recent_pro.php'); ?>
+        
 
-        <?php 
-          while($row=$recent_products->fetch_assoc()){
-        ?>
+
+      <?php foreach($recent_array['result_array'] as $key => $singleNews) {?>
+      
 
         <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-          <img class="img-fluid mb-3" src="assets/images/<?php echo $row['product_image_1']; ?>"/>
+          <img class="img-fluid mb-3" src="<?php echo $singleNews['product_single_image']; ?>"/>
           <div class="star">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
@@ -83,9 +101,9 @@
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
           </div>
-          <h5 class="viewwidth p-name"><?php echo $row['product_name']; ?></h5>
-          <h4 class="p-price">Rs. <?php echo $row['product_nor_price']; ?></h4>
-          <a href="<?php echo "single_product.php?product_id=".$row['p_id'];?>"><button class="buy-btn border border border-danger">Buy Now</button></a>
+          <h5 class="viewwidth p-name"><?php echo $singleNews['product_name']; ?></h5>
+          <h4 class="p-price">Rs. <?php echo $singleNews['product_starting_price']; ?></h4>
+          <a href="<?php echo "single_product.php?product_id=".$singleNews['product_id'];?>"><button class="buy-btn border border border-danger">Buy Now</button></a>
         </div>
         <?php } ?>
         <div class="buttons">
@@ -118,11 +136,11 @@
     </div>
     <div class="row mx-auto container-fluid mx-auto container-fluid">
 
-    <?php include('server/get_discountsec_pro.php'); ?>
-    <?php while($row = $discountsec_pro->fetch_assoc()) { ?>
+    
+    <?php foreach($discount_sec_arr['result_array'] as $key => $discount) { ?>
 
       <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-        <img class="img-fluid mb-3" src="assets/images/<?php echo $row['product_image_1'];?>"/>
+        <img class="img-fluid mb-3" src="<?php echo $discount['product_single_image'];?>"/>
         <div class="star">
           <i class="fas fa-star"></i>
           <i class="fas fa-star"></i>
@@ -130,10 +148,10 @@
           <i class="fas fa-star"></i>
           <i class="fas fa-star"></i>
         </div>
-        <h5 class="viewwidth p-name"><?php echo $row['product_name'];?></h5>
-        <h4 class="p-price">Rs. <?php echo $row['product_disc_price']; ?></h4>
-        <h6 class="viewwidth p-name" data-aos="fade-left">I was : Rs.<del><?php echo $row['product_nor_price']; ?></del></h6>
-        <a href="<?php echo "single_product.php?product_id=".$row['p_id'];?>"><button class="buy-btn border border border-danger">Buy Now</button></a>
+        <h5 class="viewwidth p-name"><?php echo $discount['product_name'];?></h5>
+        <h4 class="p-price">Rs. <?php echo $discount['product_discount_price']; ?></h4>
+        <h6 class="viewwidth p-name" data-aos="fade-right">I was : Rs.<del><?php echo $discount['product_starting_price']; ?></del></h6>
+        <a href="<?php echo "single_product.php?product_id=".$discount['product_id'];?>"><button class="buy-btn border border border-danger">Buy Now</button></a>
       </div>
       <?php } ?>
       
@@ -156,14 +174,14 @@
         <hr id="brline" class="mx-auto" data-aos="fade-right">
           <div class="row p-0 m-0">
             <div class="one col-lg-3 col-md-12 col-sm-12 p-0 ">
-              <img class="img-fluid cat-img" src="assets/images/cakeinsec.jpg"/>
+              <img class="img-fluid cat-img" src="../assets/images/cakeinsec.jpg"/>
               <div class="details">
                 <h2>Cake Ingredients</h2>
                 <div class="pure-button fuller-button white"><span class="txt_siz">MORE INFO</span> </div>
               </div>
             </div>
             <div class="one col-lg-3 col-md-12 col-sm-12 p-0">
-              <img class="img-fluid cat-img" src="assets/images/caketollssec.jpg"/>
+              <img class="img-fluid cat-img" src="../assets/images/caketollssec.jpg"/>
               <div class="details">
                 <div class="details">
                   <h2>Cake Tools</h2>
@@ -172,14 +190,14 @@
               </div>
             </div>
             <div class="one col-lg-3 col-md-12 col-sm-12 p-0 ">
-              <img class="img-fluid cat-img" src="assets/images/partydecosec.jpg"/>
+              <img class="img-fluid cat-img" src="../assets/images/partydecosec.jpg"/>
               <div class="details">
                 <h2>Party Items</h2>
                 <div class="pure-button fuller-button white"><span class="txt_siz">MORE INFO</span> </div>
               </div>
             </div>
             <div class="one col-lg-3 col-md-12 col-sm-12 p-0 ">
-              <img class="img-fluid cat-img" src="assets/images/backimage.gif"/>
+              <img class="img-fluid cat-img" src="../assets/images/backimage.gif"/>
               <div class="details">
                 <h2> Rent Items </h2>
                 <div class="pure-button fuller-button white"><span class="txt_siz">MORE INFO</span> </div>
@@ -200,15 +218,15 @@
       <hr id="brline" class="mx-auto" data-aos="fade-right">
       
         <div class="branddiv row">
-          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6"  src="assets/images/brand1.png"/> 
-          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="assets/images/brand2.jpg"/> 
-          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="assets/images/brand3.png"/> 
-          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="assets/images/brand6.png"/>
-          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="assets/images/brand4.jpg"/>
-          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="assets/images/brand5.jpg"/>
+          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6"  src="../assets/images/brand1.png"/> 
+          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="../assets/images/brand2.jpg"/> 
+          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="../assets/images/brand3.png"/> 
+          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="../assets/images/brand6.png"/>
+          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="../assets/images/brand4.jpg"/>
+          <img class="brandimg img-fluid col-lg-2 col-md-3 col-sm-6" src="../assets/images/brand5.jpg"/>
         </div>
     </section>
 
 
-    <?php include('layouts/footer.php');  ?>
+    <?php include('../layouts/footer.php');  ?>
    
