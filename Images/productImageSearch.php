@@ -25,7 +25,7 @@ class imagesProductImageSearchClass
             $cover = "https://via.placeholder.com/300/d3dgdd/FFFFFF/?text=house_of_cake_tools";
                 
         }else{
-             $cover = $this->checkImageInFolder(BLOG_IMG_FOLDER, $image);
+             $cover = $this->checkImageInFolder($folder, $image);
         }
 
         return $cover;

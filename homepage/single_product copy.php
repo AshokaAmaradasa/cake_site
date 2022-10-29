@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
   include('server/connection.php');
 
 
@@ -123,26 +123,47 @@
   
 
   
+?> -->
+
+<?php
+require_once '../configurations/urlconfig.php';
+require_once '../configurations/dirconfig.php';
+include ROOT_PATH.'/db_configurations/dbOperations.php';
+require_once ROOT_PATH.'homepage/controller/homeClassController.php';
+
+$images_array = $homepageControllerObj->fetchSingleImages(1);
+
+// print("<pre>".print_r($images_array,true)."</pre>");die;
+
 ?>
 
 
 
-<?php include('layouts/header.php');  ?>
+<?php include('../layouts/header.php');  ?>
 
 <!-- single product -->
 <section class="container single-product my-5 pt-5">
     <div class="row mt-5">
 
-        <?php  while($row = $product-> fetch_assoc()){?>
+        
 
-         
+    
         <div class="col-lg-5 col-md-6 col-sm-12">
-            <img id="mainImg" class="img-fluid w-100 pb-1" src="assets/images/<?php echo $row['product_image_1'];?>">
+            <img id="mainImg" class="img-fluid w-100 pb-1" src="<?php echo $images_array['single_image'][0]['main_image'];?>">
             <div class="small-img-group pb-5">
-                <div class="small-img-col">
-                    <img src="assets/images/<?php echo $row['product_image_1'];?>" width="100%" class="small-img"/>
+            <?php 
+            $size_array = sizeof($images_array['sub_images']);
+            for($i=0; $i<$size_array; $i++){
+            ?>
+
+
+                <div class="-img-col">
+                    <img src="<?php echo $images_array['sub_images'][$i]['image'];?>" width="100%" class="small-img"/>
                 </div>
-                <div class="small-img-col">
+
+            <?php } ?>
+
+                <!-- <div class="small-img-col">
                     <img src="assets/images/<?php echo $row['product_image_2'];?>" width="100%" class="small-img"/>
                 </div>
                 <div class="small-img-col">
@@ -151,24 +172,27 @@
                 <div class="small-img-col">
                     <img src="assets/images/<?php echo $row['product_image_4'];?>" width="100%" class="small-img"/>
                 </div>
+                <div class="small-img-col">
+                    <img src="assets/images/<?php echo $row['product_image_4'];?>" width="100%" class="small-img"/>
+                </div> -->
             </div>
         </div>
 
         
 
         <div class="col-lg-5 col-md-12 col-sm-12">  
-            <h6><?php echo $row['product_category']?></h6>
-            <h3 class="py-4"> <?php echo $row['product_name'];?></h3>
-            <h2 id="change_price">Rs.<?php echo $row['product_nor_price'];?></h2>
+            <h6><?php echo "dfgmh"?></h6>
+            <h3 class="py-4"> <?php echo "dfgmh"?></h3>
+            <h2 id="change_price">Rs.<?php echo "dfgmh"?></h2>
             <br><br>
 
 
           
 
         <form method="POST" action="cart.php">
-              <input type="hidden" name="product_id" value="<?php echo $row['p_id'];?>"/>
-              <input type="hidden" name="product_image" value="<?php echo $row['product_image_1'];?>"/>
-              <input type="hidden" name="product_name" value="<?php echo $row['product_name'];?>"/>
+              <input type="hidden" name="product_id" value="<?php echo "dfgmh"?>"/>
+              <input type="hidden" name="product_image" value="<?php echo "dfgmh"?>"/>
+              <input type="hidden" name="product_name" value="<?php echo "dfgmh"?>"/>
 
               <?php if($row['product_disc_percent'] > 0 && $onch==2){ ?> <!--if not changing and has discount-->
 
@@ -207,7 +231,7 @@
 
             
 
-              <?php  } ?>
+              
         </form>
 
         <?php if($onch == 1){ ?>

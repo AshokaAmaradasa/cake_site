@@ -17,6 +17,7 @@ $discount_sec_arr = $homepageControllerObj->fetchDiscountProducts();
 ?>
 
 <?php include('../layouts/header.php');  ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
    
   <!--corousel-->    
@@ -87,13 +88,17 @@ $discount_sec_arr = $homepageControllerObj->fetchDiscountProducts();
       <div class="row mx-auto container-fluid">.
         
         
-
+      <?php if(isset($recent_array)){?>
 
       <?php foreach($recent_array['result_array'] as $key => $singleNews) {?>
       
-
+        
         <div class="product text-center col-lg-3 col-md-4 col-sm-12">
-          <img class="img-fluid mb-3" src="<?php echo $singleNews['product_single_image']; ?>"/>
+          <div class="container">
+              <span class="hello text-center"><?php echo $singleNews['size']; ?><?php echo $singleNews['size_type']; ?></span>
+              <img class="img-fluid mb-3" src="<?php echo $singleNews['product_single_image']; ?>"/>
+          
+          </div>
           <div class="star">
             <i class="fas fa-star"></i>
             <i class="fas fa-star"></i>
@@ -114,7 +119,10 @@ $discount_sec_arr = $homepageControllerObj->fetchDiscountProducts();
            
       </div>
 
-
+    <?php }else
+    {
+      echo "<p style=\"color:Red\"> No Products to be displaed... Add a Product... </p>";
+    } ?>
       
     </section>
 
@@ -136,11 +144,14 @@ $discount_sec_arr = $homepageControllerObj->fetchDiscountProducts();
     </div>
     <div class="row mx-auto container-fluid mx-auto container-fluid">
 
-    
+  <?php if(isset($discount_sec_arr)){?>
     <?php foreach($discount_sec_arr['result_array'] as $key => $discount) { ?>
 
       <div class="product text-center col-lg-3 col-md-4 col-sm-12">
+      <div class="container">
+          <span class="hello text-center"><?php echo $singleNews['size']; ?><?php echo $singleNews['size_type']; ?></span>
         <img class="img-fluid mb-3" src="<?php echo $discount['product_single_image'];?>"/>
+      </div>
         <div class="star">
           <i class="fas fa-star"></i>
           <i class="fas fa-star"></i>
@@ -150,10 +161,10 @@ $discount_sec_arr = $homepageControllerObj->fetchDiscountProducts();
         </div>
         <h5 class="viewwidth p-name"><?php echo $discount['product_name'];?></h5>
         <h4 class="p-price">Rs. <?php echo $discount['product_discount_price']; ?></h4>
-        <h6 class="viewwidth p-name" data-aos="fade-right">I was : Rs.<del><?php echo $discount['product_starting_price']; ?></del></h6>
+        <h6 class="viewwidth p-name" data-aos="flip-right">I was : Rs.<del><?php echo $discount['product_starting_price']; ?></del></h6>
         <a href="<?php echo "single_product.php?product_id=".$discount['product_id'];?>"><button class="buy-btn border border border-danger">Buy Now</button></a>
       </div>
-      <?php } ?>
+      <?php }?>
       
      
       <div class="buttons">
@@ -163,6 +174,10 @@ $discount_sec_arr = $homepageControllerObj->fetchDiscountProducts();
       </div>
     </div>
 
+    <?php }else
+    {
+      echo "<p style=\"color:Red\"> No Products to be displaed... Add a Product... </p>";
+    } ?>
 
     
   </section>

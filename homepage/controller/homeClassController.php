@@ -25,6 +25,20 @@ class homepageControllerHomeClass extends homepageClassHomeClass{
         return $fetch_discount;
     }
 
+    public function fetchSingleImages($image_id)
+    {
+        $fetch_images = array();
+        $fetch_images = $this->getSingleProductImages($image_id);
+        return $fetch_images;
+    }
+
+    public function fetchcolorflavors($pr)
+    {
+        $colflav = array();
+        $colflav = $this->getsinglecolorflavor($pr);
+        return $colflav;
+    }
+
    
 
 
