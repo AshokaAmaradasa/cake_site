@@ -30,21 +30,23 @@ class homepageClassHomeClass extends imagesProductImageSearchClass{
             //if a result was returned
             while($fetch = mysqli_fetch_array($select) )
             {
-                $image = $fetch['product_single_image'];
+                $image = (isset($fetch['product_single_image'])) ? $fetch['product_single_image'] : '' ;
 
                 $product_image = $this -> checkImageInDb(BLOG_IMG_FOLDER,$image);
 
                 $temArray = array
                     (
-                        'brand_name' => $fetch['brand_name'],
-                        'size_type' => $fetch['size_type'],
-                        'size' => $fetch['size'],
-                        'product_name' => $fetch['product_name'],
-                        'product_id' => $fetch['product_id'],
-                        'product_starting_price' => $fetch['product_starting_price'],
+                        'brand_name' => (isset($fetch['brand_name'])) ?  $fetch['brand_name'] : 'no Brand Name defined',
+                        'size_type' => (isset($fetch['size_type'])) ? $fetch['size_type'] : 'no Size Type defined',
+                        'size' => (isset($fetch['size'])) ? $fetch['size'] : 'no Size defined',
+                        'category' => (isset($fetch['category_name'])) ? $fetch['category_name']  : 'no Category defined',
+                        'product_name' => (isset($fetch['product_name'])) ? $fetch['product_name'] : 'no Product Name defined',
+                        'product_id' => (isset($fetch['product_id'])) ? $fetch['product_id'] : 'no Product ID defined',
+                        'product_description' => (isset($fetch['product_description'])) ? $fetch['product_description'] : 'no Description defined',
+                        'product_starting_price' => (isset($fetch['product_starting_price'])) ? $fetch['product_starting_price'] : 'no Price defined' ,
                         'product_single_image' => $product_image,
-                        'product_discount' => $fetch['product_discount'], 
-                        'product_discount_price' =>$fetch['product_discount_price'] ,
+                        'product_discount' => (isset($fetch['product_discount'])) ?  $fetch['product_discount'] : 'no Discount defined', 
+                        'product_discount_price' => (isset($fetch['product_discount_price'])) ? $fetch['product_discount_price'] : 'no Discount defined',
                     );//array to fetch data 
                 array_push($passed_query_result, $temArray);//push data to the resouce array 
             }
@@ -119,12 +121,13 @@ class homepageClassHomeClass extends imagesProductImageSearchClass{
             //if a result was returned
             while($fetch = mysqli_fetch_array($select) )
             {
-                $sub_image_name = $fetch['p_image_name'];
-                $main_image_name = $fetch['product_single_image'];
+                $sub_image_name = (isset($fetch['p_image_name'])) ? $fetch['p_image_name'] : '' ;
+                $main_image_name =(isset($fetch['product_single_image'])) ? $fetch['product_single_image'] : '' ;
 
-                $sub_images = $this -> checkImageInDb(SUB_IMAGES,$sub_image_name);
+                $sub_images = $this -> checkImageInDb(SUB_IMAGES, $sub_image_name);
                 $main_image = $this -> checkImageInDb(BLOG_IMG_FOLDER, $main_image_name);
-
+                
+                // print("<pre>".print_r($sub_image,true)."</pre>");die;
                 
                 $temArray = array(
                    
@@ -136,8 +139,28 @@ class homepageClassHomeClass extends imagesProductImageSearchClass{
         }
         else
         {
+            $query = "SELECT product_single_image FROM products where product_id = $image_id";
+            $select =  mysqli_query($this->localhost, $query);
+            $fetch = mysqli_fetch_array($select);
 
+           
+
+            $sub_image_name = (isset($fetch['p_image_name'])) ? $fetch['p_image_name'] : '' ;
+            $main_image_name =(isset($fetch['product_single_image'])) ? $fetch['product_single_image'] : '' ;
+
+            $sub_images = $this -> checkImageInDb(SUB_IMAGES, $sub_image_name);
+            $main_image = $this -> checkImageInDb(BLOG_IMG_FOLDER, $main_image_name);
+            
+            // print("<pre>".print_r($sub_image,true)."</pre>");die;
+            
+            $temArray = array(
+               
+                'sub_image' => $main_image,
+                'main_image' => $main_image,
+            );
+            array_push($sub_image, $temArray);//push data to the resouce array   
         }
+       
         return array('images' => $sub_image);
 
     }
@@ -162,7 +185,7 @@ class homepageClassHomeClass extends imagesProductImageSearchClass{
             while($fetch = mysqli_fetch_array($get_the_colors) )
             {
                 $temp = array(
-                    'property_id_' => $fetch['color_id'],
+                    'property_id' => $fetch['color_id'],
                     'property_name'=> $fetch['color_name'],
                     'price_id'     => $fetch['price_id'],
                     'property_price' => $fetch['price'],
@@ -189,7 +212,7 @@ class homepageClassHomeClass extends imagesProductImageSearchClass{
             while($fetch = mysqli_fetch_array($get_the_flavors) )
             {
                 $temp = array(
-                    'property_id_' => $fetch['flavor_id'],
+                    'property_id' => $fetch['flavor_id'],
                     'property_name'=> $fetch['flavor_name'],
                     'price_id'     => $fetch['price_id'],
                     'property_price' => $fetch['price'],
@@ -212,6 +235,20 @@ class homepageClassHomeClass extends imagesProductImageSearchClass{
        
 
 
+    }
+
+    public function getsingleproductdetail($product_id)
+    {
+        $single_product_array = array();
+
+        $query = "SELECT products.product_id,product_name,product_description,product_starting_price,product_discount,product_discount_price, sizes.size,size_type, brands.brand_name, category.category_name from products JOIN sizes on sizes.size_id=products.size_id JOIN brands on brands.brand_id=products.brand_id JOIN category on category.category_id=products.category where products.product_id= $product_id";
+
+        $single_details_array =  $this -> getPassedQuery($query);
+
+
+
+        
+       return $single_details_array;
     }
 
 

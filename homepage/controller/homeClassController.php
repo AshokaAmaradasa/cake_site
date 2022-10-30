@@ -39,6 +39,14 @@ class homepageControllerHomeClass extends homepageClassHomeClass{
         return $colflav;
     }
 
+    public function fetchsingleproductdetails($product_id)
+    {
+        $single_arr = array();
+        $single_arr = $this->getsingleproductdetail($product_id);
+        return $single_arr;
+
+    }
+
    
 
 

@@ -1,4 +1,9 @@
-<?php include('layouts/header.php'); ?>
+
+
+
+<?php include('../layouts/header.php'); ?>
+
+
 
 <?php include('cart_logic.php');?>
 
@@ -8,6 +13,7 @@
             <h2 class="font-weight-bolde">Your Cart</h2>
             <hr>
         </div>
+        
         
 
         <table class="mt-5 pt-5">
@@ -97,4 +103,4 @@
 
 
 
-    <?php include('layouts/footer.php'); ?>
+    <?php include('../layouts/footer.php'); ?>

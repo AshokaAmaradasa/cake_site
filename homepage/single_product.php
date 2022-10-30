@@ -10,11 +10,22 @@ require_once '../configurations/dirconfig.php';
 include ROOT_PATH.'/db_configurations/dbOperations.php';
 require_once ROOT_PATH.'homepage/controller/homeClassController.php';
 
-$images_array = $homepageControllerObj->fetchSingleImages(3);
+if(isset($_GET['product_id']))
+{
+  $pr_id = $_GET['product_id'];
+}
+else
+{
+  header('location: index.php');
+}
 
-$fte = $homepageControllerObj->fetchcolorflavors(3);
+$images_array = $homepageControllerObj->fetchSingleImages($pr_id);
 
-//  print("<pre>".print_r($fte,true)."</pre>");die;
+$fte = $homepageControllerObj->fetchcolorflavors($pr_id);
+
+$single_det_arr = $homepageControllerObj->fetchsingleproductdetails($pr_id);
+
+  // print("<pre>".print_r($ssimages_array,true)."</pre>");die;
 
 ?>
 
@@ -28,17 +39,15 @@ $fte = $homepageControllerObj->fetchcolorflavors(3);
 
         
 
-    
-        <div class="col-lg-5 col-md-6 col-sm-12">
-            <img id="mainImg" class="img-fluid w-100 pb-1" src="<?php echo $images_array['images'][0]['main_image'];?>">
+     
+        <div class="col-lg-5 col-md-6 col-sm-12 ">
+            <img id="mainImg" class="img-fluid w-100 mb-2 border border-primary" src="<?php echo $images_array['images'][0]['main_image'];?>">
             <div class="small-img-group pb-5">
             <?php 
             $size_array = sizeof($images_array['images']);
             for($i=0; $i<$size_array; $i++){
             ?>
-
-
-                <div class="-img-col">
+                <div class="-img-col border border-dark">
                     <img src="<?php echo $images_array['images'][$i]['sub_image'];?>" width="100%" class="small-img"/>
                 </div>
 
@@ -61,35 +70,27 @@ $fte = $homepageControllerObj->fetchcolorflavors(3);
 
         
 
-        <div class="col-lg-5 col-md-12 col-sm-12">  
-            <h6><?php echo "dfgmh"?></h6>
-            <h3 class="py-4" id="tet"> <?php echo "dfgmh"?></h3>
-            <label style="positio:absolute" for="#change_price">Rs.</label><h2 id="change_price"><?php echo "dfgmh"?></h2>
+        <div class="col-lg-5 col-md-12 col-sm-12 border-right " style="background-color: #f7cac9 ;"> 
+
+
+            <h3 class="py-1" id="tet"> <?php echo $single_det_arr['result_array'][0]['product_name']?> <span><?php echo $single_det_arr['result_array'][0]['size']?><?php echo $single_det_arr['result_array'][0]['size_type']?></span></h3>
+            
+            <h6 class="d-inline text-primary">Brand &nbsp; &#10144;  &nbsp; <?php echo $single_det_arr['result_array'][0]['brand_name']?></h6>
+             
+            <h5 class="d-block mb-3">Category &nbsp; &#10144;  &nbsp;  <?php echo $single_det_arr['result_array'][0]['category']?></h5>
+
+           
+
+            <small><label  class="d-inline" for="#change_price">Rs.</label></small> &nbsp; <h3 id="change_price" class="d-inline"> <?php echo $single_det_arr['result_array'][0]['product_starting_price']?></h3>
             <br>
 
-            <select id="pcolor" name=product_color class="form-select mb-5 w-50" aria-label="Default select example"  onchange="this.form.submit();">
-                <option value="" selected disabled >Open this select menu</option>
+            <select id="pcolor" name=product_color class="form-select mb-3 w-50 mt-3" aria-label="Default select example"  onchange="this.form.submit();">
+                <option value="" selected disabled >Select an option</option>
                 <?php foreach($fte as $key => $value){?>
-                <option  value="<?php echo $value['property_price']?>"><?php echo $value['property_name']?></option> 
+                <option  value="<?php echo $value['property_price']?>" data-property="<?php echo $value['property_id']?>" data-name="<?php echo $value['property_name']?>" ><?php echo $value['property_name']?></option> 
                 <?php }?>
           
-                <script type="text/javascript">
-                  $('#pcolor').on('change', function(){
-                    
-                    $("#colorstr").val(this.value);
-                    $("#change_price").html(this.value);
-                    var tet = $("#pcolor option:selected");
-                    $("#tet").text(tet.text());
-
-                   
-
-
-                  });
-                 
-                   
-                   
-                   
-                </script>
+             
               </select>
 
 
@@ -97,22 +98,23 @@ $fte = $homepageControllerObj->fetchcolorflavors(3);
 
         <form method="POST" action="cart.php">
               
-              <input type="text" id="colorstr" name="product_color_id" /><!--hide later-->
-
+              <input type="hidden" id="colorstr" name="product_color_price" /><!--hide later-->
+              <input type="hidden" id="colorname" name="product_color_id" /><!--hide later-->
+              <input type="hidden" id="color_id" name="product_color_name" /><!--hide later-->
+              <input type="hidden" id="product_id" name="product_id" value="<?php echo $single_det_arr['result_array'][0]['product_id']?>"/><!--hide later-->
+              <input type="hidden" id="product_size" name="product_size" value="<?php echo $single_det_arr['result_array'][0]['size']?> "/><!--hide later-->
+              <input type="hidden" id="product_size" name="product_size_type" value="<?php echo $single_det_arr['result_array'][0]['size_type']?> "/><!--hide later-->
+              <input type="hidden" id="product_size" name="product_image" value="<?php echo $single_det_arr['result_array'][0]['product_single_image']?> "/><!--hide later-->
+              <input type="hidden" id="product_size" name="product_name" value="<?php echo $single_det_arr['result_array'][0]['product_name']?> "/><!--hide later-->
+              <input type="hidden" id="product_size" name="product_norm_price" value="<?php echo $single_det_arr['result_array'][0]['product_starting_price']?> "/><!--hide later-->
             
 
               <input type="number" name="product_quantity" value="1" min="1"/><br><br>
 
-
-             
-                    
-              <button class="buy-btn" name="add_to_cart" type="submit"> Add to Cart </button>
-            
-                
                 
               
 
-              <button disabled class="buy-btn" name="add_to_cart" type="submit"> Add to Cart </button>
+              <button disabled class="buy-btn" id="disable_btn" name="add_to_cart" type="submit"> Add to Cart </button>
 
            
               
@@ -134,18 +136,11 @@ $fte = $homepageControllerObj->fetchcolorflavors(3);
 
 
            
-            <h4 class="mt-5 mb-5">Product Details</h4>
-            <span> <?php echo "description" ?> </span>
+            <h4 class="mt-5 mb-2">Product Details</h4>
+            <hr>
+            <span><?php echo $single_det_arr['result_array'][0]['product_description']?> </span>
           
            
-
-         
-           
-              <!-- <script>
-                var change_price = ""
-                document.getElementById("change_price").innerHTML = change_price;
-                document.getElementById("cartchgprice").value = change_price;
-              </script> -->
 
             
 
@@ -157,6 +152,24 @@ $fte = $homepageControllerObj->fetchcolorflavors(3);
         
     </div>
         
+
+            <script type="text/javascript">
+                  $('#pcolor').on('change', function(){
+
+                    $("#disable_btn").prop('disabled', false);
+                    $("#colorstr").val(this.value);
+                    $("#change_price").html(this.value);
+                    var tet = $('#pcolor').find('option:selected').attr('data-property');
+                    $("#colorname").val(tet);
+                    var tot = $('#pcolor').find('option:selected').attr('data-name');
+                    $('#color_id').val(tot);
+
+                    
+
+                  
+                  });
+                 
+            </script>
 
 </section>
 

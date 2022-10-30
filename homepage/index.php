@@ -11,7 +11,7 @@ $discount_sec_arr = $homepageControllerObj->fetchDiscountProducts();
 
 
 
-//  print("<pre>".print_r($recent_array,true)."</pre>");die;
+// print("<pre>".print_r($recent_array,true)."</pre>");die;
 
 
 ?>
